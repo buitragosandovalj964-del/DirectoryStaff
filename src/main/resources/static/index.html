@@ -41,6 +41,16 @@
         <strong>Datos reales</strong>
         <p>Cada cambio se guarda en MySQL y sobrevive al reinicio.</p>
       </div>
+
+      <div class="sidebar-user">
+        <div class="sidebar-user-info">
+          <small>Sesión activa</small>
+          <strong id="usuarioActual">…</strong>
+        </div>
+        <form method="post" action="/logout">
+          <button type="submit" class="btn-logout" title="Cerrar sesión">Salir</button>
+        </form>
+      </div>
     </aside>
 
     <!-- CONTENIDO -->

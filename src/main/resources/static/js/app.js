@@ -56,6 +56,14 @@ async function pedir(url, opciones) {
   } catch (e) {
     throw { red: true, mensaje: "No se pudo conectar con el servidor." };
   }
+  if (resp.redirected && resp.url.includes("login.html")) {
+    window.location.href = "/login.html";
+    throw { red: true, mensaje: "Sesión expirada. Redirigiendo al login..." };
+  }
+  if (resp.status === 401) {
+    window.location.href = "/login.html";
+    throw { red: true, mensaje: "Debes iniciar sesión." };
+  }
   let cuerpo = null;
   if (resp.status !== 204) {
     try { cuerpo = await resp.json(); } catch (e) { cuerpo = null; }
@@ -462,4 +470,14 @@ document.addEventListener("keydown", (e) => {
 });
 
 /* ---------- Inicio ---------- */
+async function cargarUsuarioActual() {
+  try {
+    const r = await pedir("/api/v1/auth/usuario");
+    if (r.ok && r.cuerpo?.username) {
+      $("usuarioActual").textContent = r.cuerpo.username;
+    }
+  } catch (e) { /* si expiró, pedir() ya redirige */ }
+}
+
+cargarUsuarioActual();
 mostrarListadoCompleto();
